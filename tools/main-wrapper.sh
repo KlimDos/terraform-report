@@ -1,11 +1,17 @@
 #!/bin/bash -xe
+export AWS_DEFAULT_REGION=us-east-1
+export AWS_PROFILE=nonprod
+aws-azure-login --profile nonprod
+
+
 WORKDIR="/Users/sasha/Desktop/git/wiley/do-infrastructure/cloud/aws/contenttech/"
 #DOCKERDIR="/Users/sasha/Desktop/docker_builds/"
 DOCKERDIR="$(dirname "$(pwd)")"
 
 #declare -a SYSTEMS=("CK" "CMH" "DCM" "CTSS")
-declare -a SYSTEMS=("CMH")
+declare -a SYSTEMS=("CTSS")
 declare -a ENVS=("dev" "perf" "qa" "sit" "uat" "ppd")
+#declare -a ENVS=("dev")
 cd $WORKDIR
 if [ "$1" == "plan" ] 
 then
@@ -31,7 +37,7 @@ then
     cd "$i"
     for j in "${ENVS[@]}"
         do
-            /Users/sasha/Desktop/tf-wrapper.sh apply "$j"
+            "$DOCKERDIR"/tools/tf-wrapper.sh apply "$j"
         done
     cd ..
     done
